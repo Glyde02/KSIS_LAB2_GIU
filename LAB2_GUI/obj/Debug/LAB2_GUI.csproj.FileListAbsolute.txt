@@ -1,0 +1,15 @@
+D:\Предметы\4сем\КСИС\LAB2_GUI\LAB2_GUI\bin\Debug\LAB2_GUI.exe.config
+D:\Предметы\4сем\КСИС\LAB2_GUI\LAB2_GUI\bin\Debug\LAB2_GUI.exe
+D:\Предметы\4сем\КСИС\LAB2_GUI\LAB2_GUI\bin\Debug\LAB2_GUI.pdb
+D:\Предметы\4сем\КСИС\LAB2_GUI\LAB2_GUI\obj\Debug\LAB2_GUI.csprojAssemblyReference.cache
+D:\Предметы\4сем\КСИС\LAB2_GUI\LAB2_GUI\obj\Debug\MainWindow.g.cs
+D:\Предметы\4сем\КСИС\LAB2_GUI\LAB2_GUI\obj\Debug\App.g.cs
+D:\Предметы\4сем\КСИС\LAB2_GUI\LAB2_GUI\obj\Debug\LAB2_GUI_MarkupCompile.cache
+D:\Предметы\4сем\КСИС\LAB2_GUI\LAB2_GUI\obj\Debug\LAB2_GUI_MarkupCompile.lref
+D:\Предметы\4сем\КСИС\LAB2_GUI\LAB2_GUI\obj\Debug\MainWindow.baml
+D:\Предметы\4сем\КСИС\LAB2_GUI\LAB2_GUI\obj\Debug\LAB2_GUI.g.resources
+D:\Предметы\4сем\КСИС\LAB2_GUI\LAB2_GUI\obj\Debug\LAB2_GUI.Properties.Resources.resources
+D:\Предметы\4сем\КСИС\LAB2_GUI\LAB2_GUI\obj\Debug\LAB2_GUI.csproj.GenerateResource.cache
+D:\Предметы\4сем\КСИС\LAB2_GUI\LAB2_GUI\obj\Debug\LAB2_GUI.csproj.CoreCompileInputs.cache
+D:\Предметы\4сем\КСИС\LAB2_GUI\LAB2_GUI\obj\Debug\LAB2_GUI.exe
+D:\Предметы\4сем\КСИС\LAB2_GUI\LAB2_GUI\obj\Debug\LAB2_GUI.pdb
