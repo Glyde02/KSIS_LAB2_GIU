@@ -26,8 +26,6 @@ namespace LAB2_GUI
         static bool isClient;
         private Client client;
         private Server server;
-        //public Thread mainThread;
-        public TextBox textBox;
 
         public MainWindow()
         {
@@ -45,53 +43,20 @@ namespace LAB2_GUI
             if (isClient)
             {
                 
-                client = new Client(txtBox);
+                client = new Client(txtBox, btnOff);
                 client.InitConnection();
                 
 
             }
             else
             {
-                server = new Server(txtBox);
+                server = new Server(txtBox, btnOff);
                 server.InitConnection();
               
-            }
-
-            
+            }            
 
         }
 
-
-
-        public void VivodMessage(string text)
-        {
-            if (isClient)
-            {
-                
-
-                if (text == "Client leaft the chat")
-                {
-                    txtBox.Text += "---" + "Client leaft the chat" + "---";
-                    client.CloseConnection();
-                    btnOff.IsEnabled = false;
-                }
-                else
-                    txtBox.Text += "Client: " + text + "\n";
-            }
-            else
-            {
-                
-
-                if (text == "Client leaft the chat")
-                {
-                    //txtBox.Text += "---" + "Client leaft the chat" + "---";
-                    
-                    btnOff.IsEnabled = false;
-                }
-                else
-                    txtBox.Text += "Client: " + text + "\n";
-            }
-        }
 
 
         private void btnSend_Click(object sender, RoutedEventArgs e)
@@ -113,6 +78,7 @@ namespace LAB2_GUI
         {
             if (isClient)
             {
+                txtBox.Text += "---You leaft the chat---";
                 client.SendMessage("Client leaft the chat");
                 client.CloseThread();
                 client.CloseConnection();
@@ -121,6 +87,7 @@ namespace LAB2_GUI
             }
             else
             {
+                txtBox.Text += "---You leaft the chat---";
                 server.SendMessage("Client leaft the chat");
                 server.CloseThread();
 
@@ -144,11 +111,14 @@ namespace LAB2_GUI
         static int port = 8000;
         public Socket socket;
         private TextBox textBox1;
+        private Button button;
         private Thread clientThread;
 
-        public Client(TextBox textBox)
+
+        public Client(TextBox textBox, Button button)
         {
             this.textBox1 = textBox;
+            this.button = button;
         }
 
         public void CloseThread()
@@ -173,7 +143,9 @@ namespace LAB2_GUI
                 if (inputMessage.ToString() == "Client leaft the chat")
                 {
                     textBox1.Dispatcher.BeginInvoke(new Action(() => textBox1.Text += "---" + inputMessage.ToString() + "---"));
+                    button.Dispatcher.BeginInvoke(new Action(() => button.IsEnabled = false));
                     CloseThread();
+                    
                 }
                 else
                 {
@@ -215,11 +187,13 @@ namespace LAB2_GUI
         private Socket socket;
         private Socket clientSocket;
         private TextBox textBox1;
+        private Button button;
         private Thread serverThread;
 
-        public Server(TextBox textBox)
+        public Server(TextBox textBox, Button button)
         {
             this.textBox1 = textBox;
+            this.button = button;
         }
 
         public void CloseThread()
@@ -242,6 +216,7 @@ namespace LAB2_GUI
                 if (inputMessage.ToString() == "Client leaft the chat")
                 {
                     textBox1.Dispatcher.BeginInvoke(new Action(() => textBox1.Text += "---" + inputMessage.ToString() + "---"));
+                    button.Dispatcher.BeginInvoke(new Action(() => button.IsEnabled = false));
                     CloseThread();
                 }
                 else
