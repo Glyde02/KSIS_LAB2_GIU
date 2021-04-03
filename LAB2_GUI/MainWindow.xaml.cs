@@ -180,15 +180,17 @@ namespace LAB2_GUI
         }
     }
 
-    class Server : TCP_Connection 
+    class Server
     {
         static string ipAdress = "127.0.0.1";
         static int port = 8000;
         private Socket socket;
-        private Socket clientSocket;
+        
         private TextBox textBox1;
         private Button button;
         private Thread serverThread;
+        private Socket buffSocket;
+        private List<Socket> listSockets = new List<Socket>();
 
         public Server(TextBox textBox, Button button)
         {
@@ -201,7 +203,7 @@ namespace LAB2_GUI
             serverThread.Abort();
         }
 
-        override public void GetMessages()
+        public void GetMessages(Socket clientSocket)
         {
             while (true)
             {
@@ -209,36 +211,60 @@ namespace LAB2_GUI
                 int bytesRead = 0;
                 byte[] inputData = new byte[256];
 
-                bytesRead = clientSocket.Receive(inputData);
-                string text = Encoding.UTF8.GetString(inputData, 0, bytesRead);
-                inputMessage.Append(text);
 
-                if (inputMessage.ToString() == "Client leaft the chat")
-                {
-                    textBox1.Dispatcher.BeginInvoke(new Action(() => textBox1.Text += "---" + inputMessage.ToString() + "---"));
-                    button.Dispatcher.BeginInvoke(new Action(() => button.IsEnabled = false));
-                    CloseThread();
-                }
-                else
-                {
-                    textBox1.Dispatcher.BeginInvoke(new Action(() => textBox1.Text += "Client: " + inputMessage.ToString() + "\n"));
-                }
+                    bytesRead = clientSocket.Receive(inputData);
+                    string text = Encoding.UTF8.GetString(inputData, 0, bytesRead);
+                    inputMessage.Append(text);
+
+                    if (inputMessage.ToString() == "Client leaft the chat")
+                    {
+                        textBox1.Dispatcher.BeginInvoke(new Action(() => textBox1.Text += "---" + inputMessage.ToString() + "---"));
+                        button.Dispatcher.BeginInvoke(new Action(() => button.IsEnabled = false));
+                        CloseThread();
+                    }
+                    else
+                    {
+                        SendMessageToAll(inputMessage.ToString(), clientSocket);
+                        textBox1.Dispatcher.BeginInvoke(new Action(() => textBox1.Text += "Client: " + inputMessage.ToString() + "\n"));
+                    }
                 
             }
         }
 
-        override public void SendMessage(string outputMessage)
+
+        public void SendMessageToAll(string outputMessage, Socket clientSocket)
+        {
+            foreach (Socket someSoket in listSockets)
+            {
+                if (clientSocket != someSoket)
+                {
+                    byte[] outputData = Encoding.UTF8.GetBytes(outputMessage);
+                    someSoket.Send(outputData);
+                }
+            }
+
+
+        }
+
+        public void SendMessage(string outputMessage)
         {
 
-            byte[] outputData = Encoding.UTF8.GetBytes(outputMessage);
-            clientSocket.Send(outputData);
+            foreach (Socket sock in listSockets)
+            {
+                byte[] outputData = Encoding.UTF8.GetBytes(outputMessage);
+                sock.Send(outputData);
+
+            }
         }
 
 
         public void CloseConnection()
         {
-            clientSocket.Close();
-            socket.Close();
+            foreach (Socket sock in listSockets)
+            {
+                sock.Close();
+                socket.Close();
+            }
         }
 
         public void InitConnection()
@@ -247,16 +273,38 @@ namespace LAB2_GUI
             this.socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
             socket.Bind(ipPoint);
+            this.socket.Listen(3);
 
-            while (clientSocket == null)
-            {
-                socket.Listen(1);
-                clientSocket = this.socket.Accept();
 
-                this.serverThread = new Thread(new ThreadStart(GetMessages));
-                this.serverThread.Start();
-            }
+                Task.Run(lstn);
+
+                
+
+
+                
+
+
+                //this.serverThread = new Thread(new ThreadStart(GetMessages));
+                //this.serverThread.Start();
+           
             
         }
+
+        public void lstn()
+        {
+            while (true)
+            {
+                Socket clientSocket = this.socket.Accept();
+                this.listSockets.Add(clientSocket);
+
+
+                Task.Run(() => GetMessages(clientSocket));
+
+                
+            }
+        }
+
+
+
     }
 }
